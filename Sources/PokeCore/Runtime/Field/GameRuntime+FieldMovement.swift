@@ -31,9 +31,8 @@ extension GameRuntime {
             await self.sleep(seconds: self.fieldStepDuration)
             guard Task.isCancelled == false else { return }
             self.fieldMovementTask = nil
-            if self.consumeHeldFieldDirectionIfPossible() {
-                self.publishSnapshot()
-            }
+            _ = self.consumeHeldFieldDirectionIfPossible()
+            self.publishSnapshot()
         }
     }
 
@@ -44,6 +43,7 @@ extension GameRuntime {
     func runScriptedMovement(_ movement: ScriptMovementManifest) async {
         defer {
             scriptedMovementTask = nil
+            publishSnapshot()
         }
 
         let actors = resolvedActors(for: movement)

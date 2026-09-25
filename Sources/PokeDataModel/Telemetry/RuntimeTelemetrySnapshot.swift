@@ -22,6 +22,9 @@ public struct RuntimeTelemetrySnapshot: Codable, Equatable, Sendable {
     public let recentInputEvents: [InputEventTelemetry]
     public let assetLoadingFailures: [String]
     public let window: WindowTelemetry
+    public let inputReady: Bool
+    public let oakIntro: OakIntroTelemetry?
+    public let nicknamePrompt: NicknamePromptTelemetry?
 
     public init(
         appVersion: String,
@@ -44,7 +47,10 @@ public struct RuntimeTelemetrySnapshot: Codable, Equatable, Sendable {
         save: SaveTelemetry?,
         recentInputEvents: [InputEventTelemetry],
         assetLoadingFailures: [String],
-        window: WindowTelemetry
+        window: WindowTelemetry,
+        inputReady: Bool = true,
+        oakIntro: OakIntroTelemetry? = nil,
+        nicknamePrompt: NicknamePromptTelemetry? = nil
     ) {
         self.appVersion = appVersion
         self.contentVersion = contentVersion
@@ -67,5 +73,8 @@ public struct RuntimeTelemetrySnapshot: Codable, Equatable, Sendable {
         self.recentInputEvents = recentInputEvents
         self.assetLoadingFailures = assetLoadingFailures
         self.window = window
+        self.inputReady = inputReady
+        self.oakIntro = oakIntro
+        self.nicknamePrompt = nicknamePrompt
     }
 }

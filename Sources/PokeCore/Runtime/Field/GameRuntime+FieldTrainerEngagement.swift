@@ -66,6 +66,7 @@ extension GameRuntime {
         defer {
             clearFieldAlert()
             trainerEngagementTask = nil
+            publishSnapshot()
         }
 
         requestTrainerEncounterMusic(for: battleID)

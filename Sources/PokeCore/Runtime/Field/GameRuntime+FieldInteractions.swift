@@ -336,6 +336,7 @@ extension GameRuntime {
     ) async {
         defer {
             fieldInteractionTask = nil
+            publishSnapshot()
         }
 
         let initialDelay = validationMode || isTestEnvironment ? 0.02 : (3.0 / 60.0)
