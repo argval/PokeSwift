@@ -24,7 +24,10 @@ extension GameRuntime {
             save: makeSaveTelemetry(),
             recentInputEvents: recentInputEvents,
             assetLoadingFailures: Array(Set(assetLoadingFailures + currentFieldRenderIssues)).sorted(),
-            window: .init(scale: windowScale, renderWidth: 160, renderHeight: 144)
+            window: .init(scale: windowScale, renderWidth: 160, renderHeight: 144),
+            inputReady: isControlInputReady,
+            oakIntro: makeOakIntroTelemetry(),
+            nicknamePrompt: makeNicknamePromptTelemetry()
         )
     }
 
@@ -92,6 +95,27 @@ extension GameRuntime {
             totalBallCount: fieldHealingState.totalBallCount,
             pulseStep: fieldHealingState.pulseStep,
             nurseObjectID: fieldHealingState.nurseObjectID
+        )
+    }
+
+    func makeOakIntroTelemetry() -> OakIntroTelemetry? {
+        guard scene == .oakIntro, let state = oakIntroState else { return nil }
+        return OakIntroTelemetry(
+            phase: state.phase.rawValue,
+            pageIndex: state.currentPageIndex,
+            pageCount: state.dialoguePages.count,
+            presets: state.currentPresets,
+            focusedIndex: state.namePresetFocusedIndex,
+            isTypingCustomName: state.isTypingCustomName
+        )
+    }
+
+    func makeNicknamePromptTelemetry() -> NicknamePromptTelemetry? {
+        guard let confirmation = nicknameConfirmation else { return nil }
+        return NicknamePromptTelemetry(
+            speciesID: confirmation.speciesID,
+            defaultName: confirmation.defaultName,
+            focusedIndex: confirmation.focusedIndex
         )
     }
 

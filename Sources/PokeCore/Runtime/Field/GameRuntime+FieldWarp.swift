@@ -51,6 +51,9 @@ extension GameRuntime {
     ) async {
         defer {
             fieldTransitionTask = nil
+            if fieldMovementTask == nil {
+                publishSnapshot()
+            }
         }
 
         fieldTransitionState = .init(kind: kind, phase: .fadingOut)

@@ -513,12 +513,16 @@ extension GameRuntime {
                         prependBattlePresentationBeats(remainingBeats, battleID: battleID)
                     }
                     battlePresentationTask = nil
+                    publishSnapshot()
                     return
                 }
             }
 
             battlePresentationTask = nil
             autoAdvanceBattlePresentationIfNeeded(battleID: battleID)
+            if battlePresentationTask == nil {
+                publishSnapshot()
+            }
         }
     }
 

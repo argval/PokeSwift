@@ -1,0 +1,27 @@
+{
+  "objective": "misty",
+  "playerName": "RED",
+  "rivalName": "BLUE",
+  "starter": "SQUIRTLE",
+  "healBelowHpFraction": 0.35,
+  "catch": {
+    "species": ["CATERPIE", "WEEDLE", "PIDGEY", "RATTATA"],
+    "ballItemID": "POKE_BALL"
+  },
+  "mart": {
+    "POKE_BALL": 5,
+    "POTION": 3
+  },
+  "battle": {
+    "preference": "first_damaging"
+  },
+  "fossil": "DOME",
+  "promptAnswers": {
+    "museum_1f_admission": "NO",
+    "bike_shop_purchase_offer": "NO",
+    "bills_house_bill_pokemon_interaction_choice_prompt": "YES"
+  },
+  "jevConfidenceFloor": 0.45,
+  "noulThreshold": 0.6,
+  "acceptItemPrompts": true
+}

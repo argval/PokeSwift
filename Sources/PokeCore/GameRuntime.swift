@@ -463,6 +463,36 @@ public final class GameRuntime {
             currentFieldInteractionPolicy.blocksDirectFieldInput
     }
 
+    var isControlInputReady: Bool {
+        if battlePresentationTask != nil || evolutionTask != nil {
+            return false
+        }
+        switch scene {
+        case .launch, .splash, .scriptedSequence:
+            return false
+        case .field:
+            return isFieldControlInputReady
+        case .battle:
+            return gameplayState?.battle?.phase != .introText
+        case .evolution:
+            return evolutionState?.phase != .animating
+        case .titleAttract, .titleMenu, .titleOptions, .dialogue, .starterChoice, .naming, .oakIntro, .placeholder:
+            return true
+        }
+    }
+
+    var isFieldControlInputReady: Bool {
+        guard let modalState = currentFieldModalState else {
+            return isFieldInputLocked == false
+        }
+        switch modalState {
+        case .nicknameConfirmation, .shop, .learnMove, .itemUse:
+            return true
+        case .dialogue, .prompt, .healing, .naming, .starterChoice:
+            return false
+        }
+    }
+
     var currentFieldRenderIssues: [String] {
         guard let map = currentMapManifest else { return [] }
         return content.fieldRenderIssues(map: map, spriteIDs: currentFieldSpriteIDs)
