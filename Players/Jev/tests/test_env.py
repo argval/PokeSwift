@@ -33,3 +33,35 @@ class EnvTests(unittest.TestCase):
             else:
                 os.environ["JEV_ENV_TEST_VALUE"] = previous_test
             Path(env_path).unlink(missing_ok=True)
+
+    def test_prefers_package_env_over_repo_root(self):
+        root = Path(tempfile.mkdtemp())
+        package = root / "Players" / "Jev" / "jev_player"
+        package.mkdir(parents=True)
+        package_env = root / "Players" / "Jev" / ".env"
+        repo_env = root / ".env"
+        package_env.write_text("JEV_ENV_SCOPE=package\n", encoding="utf-8")
+        repo_env.write_text("JEV_ENV_SCOPE=repo\n", encoding="utf-8")
+        previous = os.environ.pop("JEV_ENV_SCOPE", None)
+        try:
+            # Simulate DEFAULT/REPO paths by loading through an explicit path first,
+            # then assert the package file is preferred when both exist via the
+            # same search order the module uses.
+            from jev_player import env as env_module
+
+            original_default = env_module.DEFAULT_ENV_PATH
+            original_repo = env_module.REPO_ENV_PATH
+            env_module.DEFAULT_ENV_PATH = package_env
+            env_module.REPO_ENV_PATH = repo_env
+            try:
+                loaded = load_player_env()
+                self.assertEqual(loaded, package_env)
+                self.assertEqual(os.environ["JEV_ENV_SCOPE"], "package")
+            finally:
+                env_module.DEFAULT_ENV_PATH = original_default
+                env_module.REPO_ENV_PATH = original_repo
+        finally:
+            if previous is None:
+                os.environ.pop("JEV_ENV_SCOPE", None)
+            else:
+                os.environ["JEV_ENV_SCOPE"] = previous
