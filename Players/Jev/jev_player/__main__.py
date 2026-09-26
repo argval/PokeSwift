@@ -7,12 +7,14 @@ import sys
 from pathlib import Path
 
 from jev_player.client import TelemetryClient
+from jev_player.env import load_player_env
 from jev_player.judge import Judge
 from jev_player.loop import Trace, open_world, run_player
 from jev_player.policy import Policy
 
 
 def main(argv=None):
+    load_player_env()
     parser = argparse.ArgumentParser(description="Drive PokeMac from the Jev policy.")
     parser.add_argument("--policy", default=str(Path(__file__).resolve().parents[1] / "policy.json"))
     parser.add_argument("--content", default=None, help="Path to gameplay_manifest.json")
